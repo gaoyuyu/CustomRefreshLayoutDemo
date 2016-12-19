@@ -1,5 +1,6 @@
 package com.gaoyy.customrefreshlayoutdemo.view;
 
+import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -41,7 +42,7 @@ public class RefreshLayout extends FrameLayout
 
     //头部的高度
     protected float mHeadHeight = 100;
-    protected float mWaveHeight = 120;
+    protected float mWaveHeight = 180;
 
     private static final String LOG_TAG = RefreshLayout.class.getSimpleName();
 
@@ -165,6 +166,8 @@ public class RefreshLayout extends FrameLayout
                 headerLayout.requestLayout();
             }
         });
+
+
     }
 
     @Override
@@ -219,81 +222,121 @@ public class RefreshLayout extends FrameLayout
                 float waveX = event.getX();
                 float dy = mCurrentY - mTouchY;
                 Log.e(LOG_TAG, "onTouchEvent MotionEvent.ACTION_MOVE: dy-->" + dy);
-                dy = Math.max(0,dy);
+                dy = Math.max(0, dy);
 
                 Log.e(LOG_TAG, "onTouchEvent MotionEvent.ACTION_MOVE: mWaveHeight-->" + mWaveHeight);
                 Log.e(LOG_TAG, "onTouchEvent MotionEvent.ACTION_MOVE: mHeadHeight-->" + mHeadHeight);
                 Log.e(LOG_TAG, "onTouchEvent MotionEvent.ACTION_MOVE: after select dy-->" + dy);
 
-                if(mChildView != null)
+                if (mChildView != null)
                 {
                     int headerHeight = 0;
                     float offsetY = 0;
-                    if(dy < mHeadHeight)
+                    if (dy < mHeadHeight)
                     {
                         waveView.setHeadHeight((int) dy);
                         waveView.setWaveHeight(0);
                         waveView.setWaveX((int) waveX);
                         waveView.invalidate();
-                        headerHeight = (int )dy;
+                        headerHeight = (int) dy;
                         offsetY = headerHeight;
-                        Log.e(LOG_TAG,"dy < mHeadHeight");
-                        Log.e(LOG_TAG,"dy = "+dy);
-                        Log.e(LOG_TAG,"headerHeight = "+headerHeight);
-                        Log.e(LOG_TAG,"offsetY  =  "+offsetY);
+                        Log.e(LOG_TAG, "dy < mHeadHeight");
+                        Log.e(LOG_TAG, "dy = " + dy);
+                        Log.e(LOG_TAG, "headerHeight = " + headerHeight);
+                        Log.e(LOG_TAG, "offsetY  =  " + offsetY);
 
                         arrow.setVisibility(View.GONE);
                         tip.setVisibility(View.GONE);
                         progressBar.setVisibility(View.GONE);
+
                     }
-                    else if(dy>mHeadHeight && (dy <(mHeadHeight+mWaveHeight)))
+                    else if (dy > mHeadHeight && (dy < (mHeadHeight + mWaveHeight)))
                     {
-                        float currentWaveHeight = dy-mHeadHeight;
-                        waveView.setHeadHeight((int)mHeadHeight);
-                        waveView.setWaveHeight((int)currentWaveHeight);
+                        float currentWaveHeight = dy - mHeadHeight;
+                        waveView.setHeadHeight((int) mHeadHeight);
+                        waveView.setWaveHeight((int) currentWaveHeight);
                         waveView.setWaveX((int) waveX);
                         waveView.invalidate();
-                        headerHeight = (int )mHeadHeight;
-                        offsetY = (float)(mHeadHeight+currentWaveHeight);
-                        Log.e(LOG_TAG,"dy>mHeadHeight && (dy <(mHeadHeight+mWaveHeight))");
-                        Log.e(LOG_TAG,"dy = "+dy);
-                        Log.e(LOG_TAG,"headerHeight = "+headerHeight);
-                        Log.e(LOG_TAG,"offsetY  =  "+offsetY);
-                        if(currentWaveHeight/mWaveHeight > 0.5f)
+                        headerHeight = (int) mHeadHeight;
+                        offsetY = (float) (mHeadHeight + currentWaveHeight/2);
+                        Log.e(LOG_TAG, "dy>mHeadHeight && (dy <(mHeadHeight+mWaveHeight))");
+                        Log.e(LOG_TAG, "dy = " + dy);
+                        Log.e(LOG_TAG, "headerHeight = " + headerHeight);
+                        Log.e(LOG_TAG, "offsetY  =  " + offsetY);
+                        if (currentWaveHeight / mWaveHeight > 0.5f)
                         {
                             tip.setText("下拉刷新");
-                            arrow.setVisibility(View.VISIBLE);
-                            tip.setVisibility(View.VISIBLE);
-                            arrow.setImageDrawable(getResources().getDrawable(R.drawable.ic_arrow_downward_black_24dp));
+
+                            arrow.animate().setListener(new Animator.AnimatorListener()
+                            {
+                                @Override
+                                public void onAnimationStart(Animator animator)
+                                {
+
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animator animator)
+                                {
+                                    arrow.setVisibility(View.VISIBLE);
+                                    tip.setVisibility(View.VISIBLE);
+                                }
+
+                                @Override
+                                public void onAnimationCancel(Animator animator)
+                                {
+
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animator animator)
+                                {
+
+                                }
+                            });
+                            //先执行属性动画在显示，否则中间有过渡效果，不和谐
+                            arrow.animate()
+                                    .rotationX(0)
+                                    .setDuration(15)
+                                    .start();
+
+
+
+
+
                         }
                     }
-                    else if(dy > (mHeadHeight+mWaveHeight))
+                    else if (dy > (mHeadHeight + mWaveHeight))
                     {
-                        waveView.setHeadHeight((int)mHeadHeight);
-                        waveView.setWaveHeight((int)mWaveHeight);
+                        waveView.setHeadHeight((int) mHeadHeight);
+                        waveView.setWaveHeight((int) mWaveHeight);
                         waveView.setWaveX((int) waveX);
                         waveView.invalidate();
-                        headerHeight = (int )mHeadHeight;
-                        offsetY = mHeadHeight+mWaveHeight;
-                        Log.e(LOG_TAG,"dy>mHeadHeight && (dy <(mHeadHeight+mWaveHeight))");
-                        Log.e(LOG_TAG,"dy = "+dy);
-                        Log.e(LOG_TAG,"headerHeight = "+headerHeight);
-                        Log.e(LOG_TAG,"offsetY  =  "+offsetY);
+                        headerHeight = (int) mHeadHeight;
+                        offsetY = mHeadHeight + mWaveHeight/2;
+                        Log.e(LOG_TAG, "dy>mHeadHeight && (dy <(mHeadHeight+mWaveHeight))");
+                        Log.e(LOG_TAG, "dy = " + dy);
+                        Log.e(LOG_TAG, "headerHeight = " + headerHeight);
+                        Log.e(LOG_TAG, "offsetY  =  " + offsetY);
 
                         tip.setText("释放立即刷新");
                         arrow.setVisibility(View.VISIBLE);
                         tip.setVisibility(View.VISIBLE);
-                        arrow.setImageDrawable(getResources().getDrawable(R.drawable.ic_arrow_upward_black_24dp));
+
+                        arrow.animate()
+                                .rotationX(180)
+                                .setDuration(100)
+                                .start();
                     }
 
                     mChildView.setTranslationY(offsetY);
-                    headerLayout.getLayoutParams().height = (int)offsetY;
+                    headerLayout.getLayoutParams().height = (int) offsetY;
                     headerLayout.requestLayout();
                 }
                 return true;
             case MotionEvent.ACTION_UP:
                 Log.e(LOG_TAG, "onTouchEvent MotionEvent.ACTION_UP:");
-                if (mChildView.getTranslationY() >= (mHeadHeight+mWaveHeight))
+                if (mChildView.getTranslationY() >= (mHeadHeight + mWaveHeight/2))
                 {
                     mChildView.animate().translationY(mHeadHeight).start();
 

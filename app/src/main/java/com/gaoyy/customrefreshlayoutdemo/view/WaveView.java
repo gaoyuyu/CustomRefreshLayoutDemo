@@ -3,6 +3,7 @@ package com.gaoyy.customrefreshlayoutdemo.view;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.os.Build;
@@ -97,6 +98,16 @@ public class WaveView extends View
         path.quadTo(waveX, headHeight + waveHeight, mWidth,headHeight);
         path.lineTo(mWidth, 0);
         canvas.drawPath(path, paint);
+
+
+        Paint p1 = new Paint();
+        p1.setStrokeWidth(5f);
+        p1.setColor(Color.GREEN);
+        canvas.drawPoints(new float[]{          //绘制一组点，坐标位置由float数组指定
+                0, headHeight,
+                waveX, headHeight + waveHeight,
+                mWidth,headHeight
+        },p1);
 
     }
 
