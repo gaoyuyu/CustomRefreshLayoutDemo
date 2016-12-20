@@ -3,7 +3,6 @@ package com.gaoyy.customrefreshlayoutdemo.view;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.os.Build;
@@ -14,14 +13,22 @@ import com.gaoyy.customrefreshlayoutdemo.R;
 
 public class WaveView extends View
 {
-
+    //屏幕宽度
     private int mWidth;
+    //屏幕高度
     private int mHeight;
-
+    //头部矩形高度
     private int headHeight;
-    private int waveHeight;
-    private int waveX;
-
+    //贝塞尔曲线控制点X坐标值
+    private int controlX;
+    //控制点Y坐标值
+    private int controlY;
+    //颜色
+    private int waveColor =R.color.colorPrimaryDark;
+    //画笔
+    private Paint paint;
+    //Path
+    private Path path;
 
 
     public int getHeadHeight()
@@ -34,30 +41,35 @@ public class WaveView extends View
         this.headHeight = headHeight;
     }
 
-    public int getWaveHeight()
+    public int getControlX()
     {
-        return waveHeight;
+        return controlX;
     }
 
-    public void setWaveHeight(int waveHeight)
+    public void setControlX(int controlX)
     {
-        this.waveHeight = waveHeight;
+        this.controlX = controlX;
     }
 
-    public int getWaveX()
+    public int getControlY()
     {
-        return waveX;
+        return controlY;
     }
 
-    public void setWaveX(int waveX)
+    public void setControlY(int controlY)
     {
-        this.waveX = waveX;
+        this.controlY = controlY;
     }
 
-    //画笔
-    private Paint paint;
-    //Path
-    private Path path;
+    public int getWaveColor()
+    {
+        return waveColor;
+    }
+
+    public void setWaveColor(int waveColor)
+    {
+        this.waveColor = waveColor;
+    }
 
     public WaveView(Context context)
     {
@@ -79,12 +91,16 @@ public class WaveView extends View
     {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
+
+    /**
+     * 初始化
+     */
     private void init()
     {
         path = new Path();
         paint = new Paint();
         paint.setAntiAlias(true);
-        paint.setColor(getResources().getColor(R.color.colorPrimaryDark));
+        paint.setColor(getResources().getColor(waveColor));
     }
 
 
@@ -95,20 +111,9 @@ public class WaveView extends View
         super.onDraw(canvas);
         path.reset();
         path.lineTo(0, headHeight);
-        path.quadTo(waveX, headHeight + waveHeight, mWidth,headHeight);
+        path.quadTo(controlX, headHeight + controlY, mWidth,headHeight);
         path.lineTo(mWidth, 0);
         canvas.drawPath(path, paint);
-
-
-        Paint p1 = new Paint();
-        p1.setStrokeWidth(5f);
-        p1.setColor(Color.GREEN);
-        canvas.drawPoints(new float[]{          //绘制一组点，坐标位置由float数组指定
-                0, headHeight,
-                waveX, headHeight + waveHeight,
-                mWidth,headHeight
-        },p1);
-
     }
 
     @Override

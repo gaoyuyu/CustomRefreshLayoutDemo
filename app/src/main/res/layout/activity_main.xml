@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     tools:context="com.gaoyy.customrefreshlayoutdemo.MainActivity">
 
-    <com.gaoyy.customrefreshlayoutdemo.view.RefreshLayout
+    <com.gaoyy.customrefreshlayoutdemo.view.MaterialRefreshLayout
+        android:id="@+id/rl"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -14,6 +15,7 @@
             android:background="@color/colorAccent"
             android:id="@+id/rv"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
-    </com.gaoyy.customrefreshlayoutdemo.view.RefreshLayout>
+            android:layout_height="match_parent">
+        </android.support.v7.widget.RecyclerView>
+    </com.gaoyy.customrefreshlayoutdemo.view.MaterialRefreshLayout>
 </RelativeLayout>
