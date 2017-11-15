@@ -22,7 +22,6 @@ import android.widget.TextView;
 
 import com.gaoyy.customrefreshlayoutdemo.R;
 
-import static com.gaoyy.customrefreshlayoutdemo.R.id.arrow;
 
 /**
  * Created by gaoyy on 2016/12/16 0016.
@@ -145,7 +144,7 @@ public class MaterialRefreshLayout extends FrameLayout
         mWaveView = (WaveView) mHeaderLayout.findViewById(R.id.waveview);
         mTip = (TextView) mHeaderLayout.findViewById(R.id.tip);
         mProgressBar = (ProgressBar) mHeaderLayout.findViewById(R.id.progressbar);
-        mArrow = (ImageView) mHeaderLayout.findViewById(arrow);
+        mArrow = (ImageView) mHeaderLayout.findViewById(R.id.arrow);
 
 
         this.addView(mHeaderLayout);
